@@ -1,4 +1,5 @@
-{
+{  
+  "dockerFileRelativePath": "..\\sitecore-xm-jss\\Dockerfile",
   "tags": [
     {
       "tag": "sitecore-xm-sxa-jss-cm:9.2.0-windowsservercore-${windowsservercore_version}",
