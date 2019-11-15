@@ -258,6 +258,9 @@ function Invoke-Build
 
             $buildOptions.Add("--tag '$tag'")
 
+            $dockerFilePath = $spec.DockerFilePath
+            $buildOptions.Add("--file '$dockerFilePath'")
+            
             $buildCommand = "docker image build {0} '{1}'" -f ($buildOptions -join " "), $spec.Path
 
             Write-Verbose ("Invoking: {0} " -f $buildCommand) -Verbose:$VerbosePreference
@@ -472,7 +475,14 @@ function Get-BuildSpecifications
         $buildContextPath = $_.Directory.FullName
         $buildFilePath = $_.FullName
         $data = Get-Content -Path $buildFilePath | ConvertFrom-Json
-        $dockerFile = Get-Item -Path (Join-Path $buildContextPath "\Dockerfile")
+
+        $dockerFileRelativePath = $data.dockerFileRelativePath
+        if ($null -eq $dockerFileRelativePath)
+        {
+            $dockerFileRelativePath = "Dockerfile"
+        }               
+        $dockerFile = Get-Item -Path (Join-Path $buildContextPath $dockerFileRelativePath)
+        
 
         $sources = @()
 
